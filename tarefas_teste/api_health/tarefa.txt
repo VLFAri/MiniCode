@@ -1,0 +1,1 @@
+No mini roteador app.py, adicione a rota GET /health que devolva o status 200 e o corpo {"status": "ok"}. As rotas existentes devem continuar funcionando e caminhos desconhecidos continuam devolvendo 404.

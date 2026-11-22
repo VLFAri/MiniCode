@@ -1,0 +1,1 @@
+Crie intervalos.py com a função mesclar_intervalos(lista) que receba uma lista de tuplas (inicio, fim), possivelmente desordenada, e devolva a lista de tuplas ordenada com os intervalos sobrepostos ou que se tocam mesclados. Exemplo: [(1, 3), (2, 6), (8, 10)] vira [(1, 6), (8, 10)].

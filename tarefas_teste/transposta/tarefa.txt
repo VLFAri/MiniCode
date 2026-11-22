@@ -1,0 +1,1 @@
+Crie matriz.py com a função transposta(m) que receba uma matriz como lista de listas e devolva a transposta (nova matriz). Lista vazia devolve []. Se as linhas tiverem tamanhos diferentes, lance ValueError.

@@ -1,0 +1,1 @@
+Refatore contador.py (que usa uma variável global): crie a classe Contador com os métodos incrementar(passo=1), valor() e zerar(), e mantenha as funções de módulo incrementar(passo=1), valor() e zerar() funcionando, delegando a uma instância padrão do módulo. Instâncias diferentes de Contador devem ser independentes.

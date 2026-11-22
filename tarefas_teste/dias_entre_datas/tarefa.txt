@@ -1,0 +1,1 @@
+Crie datas.py com a função dias_entre(d1, d2) que receba duas datas no formato AAAA-MM-DD e devolva o número inteiro de dias entre elas (sempre não negativo, independentemente da ordem). Datas inválidas lançam ValueError.

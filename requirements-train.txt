@@ -1,0 +1,8 @@
+# Seletor local e treino (Colab já traz torch, datasets e matplotlib)
+torch
+transformers>=4.44
+peft>=0.12
+accelerate
+bitsandbytes
+datasets
+matplotlib

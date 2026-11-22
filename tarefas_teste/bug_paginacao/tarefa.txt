@@ -1,0 +1,1 @@
+A função paginar(itens, pagina, tamanho) em paginacao.py deveria ser 1-indexada (a página 1 devolve os primeiros itens), mas devolve a página errada. Corrija. Se pagina ou tamanho forem menores que 1, lance ValueError. Páginas além do fim devolvem lista vazia.

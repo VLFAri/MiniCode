@@ -1,0 +1,144 @@
+Crie uma função que calcule o fatorial de um número inteiro.
+Implemente uma função que verifique se um número inteiro é primo.
+Crie uma função que retorne os n primeiros números da sequência de Fibonacci.
+Implemente o algoritmo de busca binária iterativa em uma lista ordenada.
+Crie uma função que ordene uma lista de inteiros usando Merge Sort.
+Implemente uma função que calcule o máximo divisor comum (MDC) entre dois inteiros.
+Crie uma função que calcule a distância de Levenshtein entre duas strings.
+Implemente uma função que verifique se uma string é um palíndromo ignorando espaços.
+Crie uma função que agrupe uma lista de palavras por anagramas.
+Implemente uma função que encontre os dois números em uma lista que somam um valor alvo.
+Crie uma função que rotacione uma matriz quadrada 90 graus no sentido horário.
+Implemente o crivo de Eratóstenes para listar todos os primos até n.
+Adicione paginação ao endpoint GET /users aceitando page e page_size.
+Adicione validação de e-mail e senha no módulo de cadastro de clientes.
+Crie um decorador de cache em memória com tempo de expiração (TTL).
+Adicione uma rota /health que retorne o JSON status ok.
+Corrija o erro de NullPointerException no serviço de usuários.
+Implemente um gerenciador de contexto em Python para medir o tempo de execução.
+Crie uma classe de Pilha (Stack) com métodos push, pop, peek e verificação de vazia.
+Implemente uma classe de fila FIFO com testes unitários em pytest.
+Crie uma função que compacte uma string usando Run-Length Encoding.
+Implemente uma função para calcular a interseção e união de duas listas sem duplicatas.
+Crie uma função que valide se uma expressão possui parênteses balanceados.
+Implemente um sistema simples de log em arquivo com rotação por tamanho.
+Crie uma função que filtre dicionários em uma lista com base em múltiplos critérios opcionais.
+Implemente o algoritmo de ordenação Quick Sort com escolha de pivô mediana de três.
+Crie uma função que inverta uma lista encadeada simples in-place.
+Implemente uma classe de Árvore Binária de Busca (BST) com inserção e busca.
+Crie uma função que encontre o caminho mais curto em um labirinto usando BFS.
+Implemente uma função para detectar ciclos em um grafo direcionado usando DFS.
+Crie uma função que calcule a potência de um número usando exponenciação rápida.
+Implemente uma função que resolva o problema da mochila fracionária (Greedy).
+Crie uma função que determine se duas árvores binárias são idênticas.
+Implemente uma função que encontre o menor ancestral comum (LCA) em uma árvore binária.
+Crie uma função que calcule o determinante de uma matriz 3x3.
+Implemente um algoritmo de criptografia César com chave dinâmica.
+Crie uma função que valide se uma string representa um IP v4 válido.
+Implemente um conversor de números romanos para inteiros.
+Crie uma função que calcule o troco ideal usando programação dinâmica.
+Implemente uma função que encontre a maior subsequência comum (LCS) entre duas strings.
+Adicione autenticação JWT em um endpoint protegido FastAPI.
+Implemente um rate limiter baseado em token bucket usando Redis simulado.
+Crie um middleware de logging de requisições HTTP para Flask ou FastAPI.
+Adicione tratamento global de exceções customizadas para erros de banco de dados.
+Implemente um validador de CPF/CNPJ com cálculo de dígitos verificadores.
+Crie um endpoint de upload de arquivos com restrição de extensão e tamanho máximo.
+Adicione paginação cursor-based em uma API REST de listagem de produtos.
+Implemente um sistema de mensageria publish-subscribe em memória com locks.
+Crie um decorador de retry com backoff exponencial para chamadas de rede instáveis.
+Adicione testes unitários com pytest e mock para um cliente HTTP externo.
+Implemente uma classe LRU Cache com política de remoção baseada em uso recente.
+Crie uma função que calcule a mediana de um fluxo contínuo de números usando heaps.
+Implemente o algoritmo de Dijkstra para encontrar o menor caminho em um grafo ponderado.
+Crie uma função que resolva o problema das N-Rainhas usando backtracking.
+Implemente uma função que encontre todos os componentes conexos em um grafo não direcionado.
+Crie uma função que aplique compressão Huffman em um texto.
+Implemente o algoritmo de Union-Find (Disjoint Set) com otimização por rank e path compression.
+Crie uma função que calcule a árvore geradora mínima usando o algoritmo de Kruskal.
+Implemente o algoritmo A* para busca de caminhos em grade 2D.
+Crie uma função que valide arquivos JSON contra um schema pré-definido.
+Adicione suporte a concorrência assíncrona com `asyncio` em um scraper de páginas web.
+Implemente uma classe de pool de conexões simples e segura para threads.
+Crie um decorador de medição de consumo de memória usando a biblioteca tracemalloc.
+Adicione versionamento de API via header HTTP em rotas Flask.
+Implemente um validador de força de senha complexa com regras configuráveis.
+Crie uma função que converta dados tabulares de CSV para JSON aninhado.
+Adicione um sistema de auditoria de alterações (changelog automático) em modelos de dados.
+Implemente uma fila de tarefas assíncronas baseada em threads com tratamento de falhas.
+Crie um gerador de relatórios em PDF estruturado a partir de dados de dicionário.
+Adicione persistência local usando SQLite com mapeamento objeto-relacional minimalista.
+Crie uma função que remova tags HTML maliciosas de uma string de entrada (Sanitization).
+Implemente um algoritmo de busca por aproximação de substrings (Fuzzy Matching).
+Crie uma função que agrupe eventos temporais por intervalos de 1 hora.
+Implemente um throttler de requisições por IP usando dicionário thread-safe.
+Crie um parser simples para interpretar expressões matemáticas infixas.
+Implemente uma função que calcule a distância geométrica entre dois pontos de GPS (Haversine).
+Crie um decorador para converter automaticamente retornos de funções para JSON.
+Adicione suporte a transações atômicas simuladas em operações de arquivos locais.
+Implemente uma classe de Fila de Prioridade (Priority Queue) usando heapq.
+Crie uma função que valide a integridade de arquivos comparando hashes MD5/SHA256.
+Implemente uma função que aplique filtro de suavização (média móvel) em uma série temporal.
+Crie um sistema de cache em disco baseado em arquivos JSON expirados por tempo.
+Adicione um comando CLI usando argparse para gerenciar migrações de dados locais.
+Implemente uma função que calcule o desvio padrão e a variância de uma lista de números.
+Crie um validador de parâmetros de URL para evitar ataques de Path Traversal.
+Implemente um mecanismo de circuit breaker simples para chamadas de API externas.
+Crie uma função que transforme uma árvore genealógica aninhada em lista achatada.
+Adicione suporte a internacionalização (i18n) básica com dicionários de tradução em JSON.
+Implemente uma função que calcule a inflação acumulada a partir de uma série de taxas mensais.
+Crie um middleware de compressão Gzip para respostas HTTP personalizadas.
+Implemente um algoritmo de agrupamento K-Means simplificado em espaço bidimensional.
+Crie uma função que calcule a matriz de correlação de Pearson entre duas variáveis.
+Implemente uma classe de Grafo ponderado com suporte a busca em largura (BFS).
+Crie uma função que valide se um arquivo CSV possui cabeçalhos consistentes.
+Adicione um sistema de lock distribuído simulado com arquivos de controle.
+Implemente uma função que realize a normalização Min-Max em uma lista de features numéricas.
+Crie um decorador de auditoria que registre parâmetros e tempo de execução em log.
+Adicione paginação e ordenação dinâmica por campos arbitrários em consultas SQL simuladas.
+Implemente uma função que encontre sub-redes IP válidas a partir de uma máscara CIDR.
+Crie um parser de logs de acesso Nginx para extrair IPs e códigos de status HTTP.
+Implemente uma função que calcule a probabilidade binomial para eventos discretos.
+Crie um gerenciador de configurações baseado em variáveis de ambiente com validação Pydantic.
+Implemente uma função que valide formatos de cartões de crédito usando o algoritmo de Luhn.
+Crie um gerador de dados sintéticos para testes de estresse em banco de dados.
+Adicione um sistema de métricas internas (contador de requisições e latência média) em memória.
+Implemente uma função que calcule a transformada discreta de Fourier (DFT) simplificada.
+Crie um validador de esquema de dicionários aninhados profundos.
+Implemente um algoritmo de backtracking para preenchimento de Sudoku 9x9.
+Crie uma função que ordene tarefas com dependências cíclicas usando ordenação topológica.
+Adicione suporte a rotas dinâmicas com parâmetros coringa em um mini framework web.
+Implemente uma função que calcule o centroide de um polígono geométrico 2D.
+Crie um decorador para limitar o número de chamadas simultâneas (Semaphore).
+Adicione um mecanismo de backup automático com compactação ZIP rotativa.
+Implemente uma função que valide a sintaxe de templates de string personalizados.
+Crie um analisador léxico simples (Tokenizer) para uma linguagem de programação básica.
+Implemente uma função que calcule o histograma de frequências de pixels em uma imagem simulada.
+Crie um sistema de permissões baseado em papéis (RBAC) para controle de acesso a endpoints.
+Adicione um coletor de lixo customizado para objetos temporários em cache em memória.
+Implemente uma função que resolva o problema do Caixeiro Viajante usando força bruta otimizada.
+Crie um gerador de senhas seguras com entropia controlada e caracteres customizáveis.
+Implemente um filtro de Bloom probabilístico para checagem rápida de existência de itens.
+Crie uma função que calcule a similaridade de cosseno entre dois vetores esparsos.
+Adicione um sistema de injeção de dependências minimalista baseado em decoradores.
+Implemente uma função que realize a fatoração LU de matrizes quadradas.
+Crie um decorador para mascarar dados sensíveis (como tokens e CPFs) em logs de erro.
+Adicione suporte a múltiplos storages (Local e S3 simulado) em um gerenciador de arquivos.
+Implemente uma função que calcule o fluxo máximo em uma rede usando o algoritmo de Ford-Fulkerson.
+Crie um validador de parâmetros de paginação contra estouro de memória (Offset Limits).
+Implemente um parser para arquivos de configuração no formato INI personalizado.
+Crie uma função que calcule o intervalo de confiança estatístico para uma amostra.
+Adicione um sistema de fila com prioridade baseada no tempo de espera (Aging).
+Implemente uma função que determine se um polígono contém um ponto específico (Ray Casting).
+Crie um decorador para tratamento automático de conexões perdidas com banco de dados.
+Adicione suporte a streaming de arquivos grandes em chunks via API REST.
+Implemente uma função que simule a execução de uma máquina de Turing simples.
+Crie um validador de consistência temporal para agendamentos de eventos recorrentes.
+Implemente um algoritmo de compressão Run-Length bidimensional para matrizes binárias.
+Crie um sistema de eventos (Event Dispatcher) desacoplado com ouvintes registrados.
+Adicione suporte a cache distribuído simulado com invalidação por eventos de chave.
+Implemente uma função que calcule a rotação de pontos cartesianos em torno de uma origem.
+Crie um gerador de relatórios estatísticos em formato Markdown formatado.
+Adicione um mecanismo de auto-recuperação (Self-Healing) para arquivos de estado corrompidos.
+Implemente uma função que valide a corretude sintática de blocos de código JSON aninhados.
+Crie um mini framework de testes unitários com asserções customizadas e relatórios em console.

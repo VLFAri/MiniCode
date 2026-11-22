@@ -1,77 +1,28 @@
 import argparse
 import json
-import shutil
 import sys
-import tempfile
-import time
 from pathlib import Path
 
 from src.agente.orquestrador import Orquestrador
-from src.modelo.cliente_llm import LLMClient
+from src.avaliador.avaliador import avaliar_tarefa, resumir  # noqa: F401  (reexportados: usados pelo CLI e pelos testes)
+from src.selector.seletor import criar_seletor
+from src.spec.modelo_local import criar_llm_spec
 
 
-def avaliar_tarefa(dir_tarefa: Path, saida: Path, max_reparos: int, max_iteracoes: int) -> dict:
-    tarefa = (dir_tarefa / "tarefa.txt").read_text(encoding="utf-8").strip()
-
-    with tempfile.TemporaryDirectory() as tmp:
-        projeto = Path(tmp) / "projeto"
-        shutil.copytree(dir_tarefa / "projeto", projeto)
-
-        llm = LLMClient()
-        inicio = time.time()
-        agente = Orquestrador(
-            tarefa, project_root=projeto, llm=llm,
-            max_reparos=max_reparos, max_iteracoes=max_iteracoes,
-        )
-        sucesso = agente.executar()
-        segundos = time.time() - inicio
-
-        estado = json.loads((projeto / ".minicode" / "state.json").read_text(encoding="utf-8"))
-        acoes = (projeto / ".minicode" / "actions.jsonl").read_text(encoding="utf-8").splitlines()
-        tool_calls = sum(1 for a in acoes if json.loads(a).get("type") == "tool_call")
-
-        destino = saida / dir_tarefa.name
-        if destino.exists():
-            shutil.rmtree(destino)
-        shutil.copytree(projeto / ".minicode", destino)
-
-    return {
-        "task": dir_tarefa.name,
-        "success": sucesso,
-        "first_attempt_success": bool(estado.get("first_attempt_success")),
-        "iterations": estado.get("repair_attempts", 0) + 1,
-        "llm_calls": estado.get("llm_calls", 0),
-        "tool_calls": tool_calls,
-        "prompt_tokens": estado.get("prompt_tokens", 0),
-        "completion_tokens": estado.get("completion_tokens", 0),
-        "seconds": round(segundos, 1),
-        "error": estado.get("error"),
-    }
-
-
-def resumir(resultados: list) -> dict:
-    n = len(resultados)
-    if n == 0:
-        return {}
-    return {
-        "tasks": n,
-        "TaskSuccessRate": sum(r["success"] for r in resultados) / n,
-        "FirstAttemptSuccess": sum(r["first_attempt_success"] for r in resultados) / n,
-        "AverageIterations": sum(r["iterations"] for r in resultados) / n,
-        "AverageLLMCalls": sum(r["llm_calls"] for r in resultados) / n,
-    }
-
-
-def avaliar_lote(dir_tarefas: str, dir_saida: str, max_reparos: int, max_iteracoes: int) -> int:
+def avaliar_lote(dir_tarefas: str, dir_saida: str, max_reparos: int, max_iteracoes: int, selector=None, llm_spec=None,
+                 hard_gates: bool = True) -> int:
     saida = Path(dir_saida)
     saida.mkdir(parents=True, exist_ok=True)
 
+    extra = {k: v for k, v in (("selector", selector), ("llm_spec", llm_spec)) if v}
+    if not hard_gates:
+        extra["hard_gates"] = False
     resultados = []
     for d in sorted(Path(dir_tarefas).iterdir()):
         if not (d / "tarefa.txt").exists():
             continue
         print(f"\n##### {d.name} #####")
-        resultados.append(avaliar_tarefa(d, saida, max_reparos, max_iteracoes))
+        resultados.append(avaliar_tarefa(d, saida, max_reparos, max_iteracoes, **extra))
 
     resumo = resumir(resultados)
     (saida / "resultados.json").write_text(
@@ -89,19 +40,34 @@ def avaliar_lote(dir_tarefas: str, dir_saida: str, max_reparos: int, max_iteraco
 
 
 def main(argv=None) -> int:
-    parser = argparse.ArgumentParser(prog="minicode", description="MiniCode v1 - agente de programação")
+    parser = argparse.ArgumentParser(prog="minicode", description="MiniCode v2 - agente de programação")
     parser.add_argument("tarefa", nargs="?", help="Tarefa em linguagem natural (se omitida, será pedida)")
     parser.add_argument("--project", default="workspace", help="Diretório do projeto a modificar (padrão: ./workspace, criado se não existir)")
     parser.add_argument("--max-reparos", type=int, default=5, help="Máximo de ciclos de reparo (padrão: 5)")
     parser.add_argument("--max-iteracoes", type=int, default=15, help="Máximo de ações do LLM por ciclo (padrão: 15)")
     parser.add_argument("--avaliar", metavar="DIR_TAREFAS", help="Modo avaliação: roda o agente em todas as tarefas do diretório")
     parser.add_argument("--saida", default="experiments/resultados", help="Onde guardar os resultados da avaliação")
+    parser.add_argument("--selector", choices=["nenhum", "base", "lora"], default="nenhum",
+                        help="seletor de ferramentas (modelo pequeno) que recomenda a próxima ação ao agente")
+    parser.add_argument("--selector-modelo", default=None, help="modelo base do seletor (padrão: Qwen2.5-1.5B-Instruct)")
+    parser.add_argument("--selector-adapter", default=None, help="pasta do adapter LoRA (obrigatório com --selector lora)")
+    parser.add_argument("--spec-model", choices=["nenhum", "base", "lora"], default="nenhum",
+                        help="modelo pequeno que gera a ESPECIFICAÇÃO no lugar do Qwen-14B (plano e código continuam no 14B)")
+    parser.add_argument("--spec-modelo", default=None, help="modelo base do gerador de spec (padrão: Qwen2.5-Coder-1.5B-Instruct)")
+    parser.add_argument("--spec-adapter", default=None, help="pasta do adapter LoRA (obrigatório com --spec-model lora)")
+    parser.add_argument("--sem-hard-gates", action="store_true",
+                        help="SÓ PARA ABLAÇÃO: desliga o gate VERIFYING->DONE (a regra vira instrução no prompt)")
+    parser.add_argument("--spec-4bit", action="store_true", help="carrega o modelo em 4 bits (use se o adapter foi treinado com QLoRA; exige GPU)")
     args = parser.parse_args(argv)
 
-    if args.avaliar:
-        return avaliar_lote(args.avaliar, args.saida, args.max_reparos, args.max_iteracoes)
+    seletor = criar_seletor(args.selector, args.selector_modelo, args.selector_adapter)
+    llm_spec = criar_llm_spec(args.spec_model, args.spec_modelo, args.spec_adapter, quant4bit=args.spec_4bit)
 
-    print("=== MiniCode v1 ===")
+    if args.avaliar:
+        return avaliar_lote(args.avaliar, args.saida, args.max_reparos, args.max_iteracoes, seletor, llm_spec,
+                            hard_gates=not args.sem_hard_gates)
+
+    print("=== MiniCode v2 ===")
     tarefa = args.tarefa if args.tarefa else input("> ")
 
     if not tarefa.strip():
@@ -120,6 +86,9 @@ def main(argv=None) -> int:
             project_root=project_root,
             max_iteracoes=args.max_iteracoes,
             max_reparos=args.max_reparos,
+            selector=seletor,
+            llm_spec=llm_spec,
+            hard_gates=not args.sem_hard_gates,
         )
         sucesso = agente.executar()
     except Exception as e:

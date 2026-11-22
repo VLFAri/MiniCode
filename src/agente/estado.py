@@ -25,8 +25,10 @@ class GerenciadorEstado:
         "REPAIRING": ["VERIFYING"],
     }
 
-    def __init__(self, tarefa: str, project_root: str = ".", max_reparos: int = 3):
+    def __init__(self, tarefa: str, project_root: str = ".", max_reparos: int = 3, hard_gates: bool = True):
         self.tarefa = tarefa
+        # hard_gates=False existe SÓ para o estudo de ablação (regra no prompt x regra imposta pelo programa)
+        self.hard_gates = hard_gates
         self.project_root = Path(project_root).resolve()
         self.minicode_dir = self.project_root / ".minicode"
         self.minicode_dir.mkdir(parents=True, exist_ok=True)
@@ -104,7 +106,7 @@ class GerenciadorEstado:
             if self.tentativas_reparo >= self.max_reparos:
                 raise RuntimeError("Hard Gate violado: limite de tentativas de reparo atingido.")
 
-        if novo_estado == "DONE":
+        if novo_estado == "DONE" and self.hard_gates:
             if not self.testes_executados:
                 raise RuntimeError("Hard Gate violado: DONE exige testes executados.")
             if not self.testes_atualizados:

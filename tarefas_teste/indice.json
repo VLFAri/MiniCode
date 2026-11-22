@@ -1,0 +1,90 @@
+[
+ {
+  "nome": "frequencia_palavras",
+  "tipo": "funcao"
+ },
+ {
+  "nome": "mesclar_intervalos",
+  "tipo": "funcao"
+ },
+ {
+  "nome": "avaliar_rpn",
+  "tipo": "funcao"
+ },
+ {
+  "nome": "transposta",
+  "tipo": "funcao"
+ },
+ {
+  "nome": "dias_entre_datas",
+  "tipo": "funcao"
+ },
+ {
+  "nome": "dividir_em_blocos",
+  "tipo": "funcao"
+ },
+ {
+  "nome": "validar_placa",
+  "tipo": "validacao"
+ },
+ {
+  "nome": "data_valida_br",
+  "tipo": "validacao"
+ },
+ {
+  "nome": "normalizar_telefone",
+  "tipo": "validacao"
+ },
+ {
+  "nome": "duracao_para_segundos",
+  "tipo": "funcao"
+ },
+ {
+  "nome": "achatar_lista",
+  "tipo": "funcao"
+ },
+ {
+  "nome": "bug_media_mediana",
+  "tipo": "bug"
+ },
+ {
+  "nome": "bug_paginacao",
+  "tipo": "bug"
+ },
+ {
+  "nome": "bug_lista_compartilhada",
+  "tipo": "bug"
+ },
+ {
+  "nome": "bug_texto",
+  "tipo": "bug"
+ },
+ {
+  "nome": "api_health",
+  "tipo": "api"
+ },
+ {
+  "nome": "api_paginacao_usuarios",
+  "tipo": "api"
+ },
+ {
+  "nome": "api_validacao_cadastro",
+  "tipo": "api"
+ },
+ {
+  "nome": "criar_testes_calculadora",
+  "tipo": "testes"
+ },
+ {
+  "nome": "criar_testes_inventario",
+  "tipo": "testes"
+ },
+ {
+  "nome": "refatorar_descontos",
+  "tipo": "refatoracao"
+ },
+ {
+  "nome": "refatorar_contador",
+  "tipo": "refatoracao"
+ }
+]

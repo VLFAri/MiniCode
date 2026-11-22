@@ -1,0 +1,1 @@
+Crie rpn.py com a função avaliar_rpn(expressao) que avalie uma expressão em notação polonesa reversa, com tokens separados por espaço, números e os operadores + - * /. Expressão inválida (vazia, token desconhecido, operandos faltando ou sobrando) lança ValueError; divisão por zero lança ZeroDivisionError.

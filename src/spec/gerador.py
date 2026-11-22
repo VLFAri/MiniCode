@@ -54,8 +54,9 @@ def validar_spec(texto: str) -> list:
 
 
 class GeradorSpec:
-    def __init__(self, llm, log=None, max_tentativas: int = 3):
+    def __init__(self, llm, log=None, max_tentativas: int = 3, llm_spec=None):
         self.llm = llm
+        self.llm_spec = llm_spec   # v2: modelo pequeno especializado, usado só para gerar a especificação
         self.log = log or (lambda *a, **k: None)
         self.max_tentativas = max_tentativas
 
@@ -66,7 +67,7 @@ class GeradorSpec:
             extra = ""
             if problemas:
                 extra = f"\n\nA tentativa anterior foi rejeitada: {'; '.join(problemas)}. Corrija."
-            spec = limpar_cercas(self.llm.complete(prompt + extra))
+            spec = limpar_cercas((self.llm_spec or self.llm).complete(prompt + extra))
             problemas = validar_spec(spec)
             self.log("spec_attempt", attempt=tentativa, problems=problemas)
             if not problemas:

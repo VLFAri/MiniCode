@@ -1,0 +1,1 @@
+Em texto.py, eh_palindromo deve ignorar maiúsculas, espaços e pontuação ("Anotaram a data da maratona" é palíndromo) e contar_vogais deve contar também vogais maiúsculas e acentuadas (á é í ó ú â ê ô ã õ). As duas funções estão erradas; corrija-as.

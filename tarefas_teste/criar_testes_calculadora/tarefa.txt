@@ -1,0 +1,1 @@
+Crie o arquivo tests/test_calculadora.py com testes pytest para as funções somar, subtrair e dividir de calculadora.py, incluindo o caso de divisão por zero (ZeroDivisionError). Não altere calculadora.py.

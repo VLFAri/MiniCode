@@ -57,6 +57,18 @@ Quando terminar as alterações, responda:
 """
 
 
+# Variante usada só na ablação "regra no prompt x hard gate": o modelo é INSTRUÍDO a rodar os testes
+# (e tem a ferramenta run_tests), mas nada no programa o obriga a isso.
+_AVISO_SISTEMA = "Os testes são executados pelo sistema, não por você."
+_REGRA_SISTEMA = ("- NÃO execute o pytest: o sistema roda os testes sozinho quando você responder finish e lhe "
+                  "devolve o erro.\n")
+assert _AVISO_SISTEMA in PROMPT_SISTEMA and _REGRA_SISTEMA in PROMPT_SISTEMA
+PROMPT_SISTEMA_SO_PROMPT = PROMPT_SISTEMA.replace(
+    _AVISO_SISTEMA, "Você deve verificar o seu próprio trabalho executando os testes.").replace(
+    _REGRA_SISTEMA, "- ANTES de responder finish, EXECUTE os testes com a ferramenta run_tests e corrija os erros "
+                    "até todos passarem.\n")
+
+
 class Orquestrador:
     def __init__(
         self,
@@ -66,16 +78,29 @@ class Orquestrador:
         llm: LLMClient = None,
         max_iteracoes: int = 15,
         max_reparos: int = 5,
+        selector=None,
+        llm_spec=None,
+        hard_gates: bool = True,
     ):
         self.tarefa = tarefa
+        self.hard_gates = hard_gates
+        # sem hard gate, o modelo roda os testes por conta própria (run_tests deixa de ser exclusivo do harness)
+        self._harness = FERRAMENTAS_DO_HARNESS if hard_gates else set()
         self.project_root = Path(project_root).resolve()
         self.max_iteracoes = max_iteracoes
-        self.estado = GerenciadorEstado(tarefa, self.project_root, max_reparos=max_reparos)
+        self.estado = GerenciadorEstado(tarefa, self.project_root, max_reparos=max_reparos, hard_gates=hard_gates)
         self.minicode_dir = self.estado.minicode_dir
         self.llm = llm or LLMClient()
         self.registro = registro or RegistroFerramentas(self.project_root)
-        self.gerador = GeradorSpec(self.llm, log=self.estado.log_acao)
+        self.gerador = GeradorSpec(self.llm, log=self.estado.log_acao, llm_spec=llm_spec)
         self.violacoes = 0
+
+        # v2: seletor de ferramentas (modelo pequeno especializado) e rastro de decisões
+        self.selector = selector
+        self._passos = []          # histórico de decisões: {"tool", "path", "ok"}
+        self._ultimo_erro = None   # assinatura do último erro do pytest (vira feature do seletor)
+        self._sel_total = 0
+        self._sel_seguiu = 0
 
 
     @staticmethod
@@ -125,12 +150,86 @@ class Orquestrador:
         return texto[:limite] + f"\n... [truncado, {len(texto) - limite} caracteres omitidos]"
 
 
+    # ------------------------------------------------------------------ v2: seletor de ferramentas
+    @staticmethod
+    def _caminho_arg(args: dict):
+        caminho = args.get("path")
+        return caminho if isinstance(caminho, str) else None
+
+    def _features_seletor(self) -> str:
+        """Estado compacto do agente. É a ENTRADA do seletor: o mesmo texto é gravado no dataset de
+        treino e montado na inferência, então o formato não pode divergir entre os dois."""
+        est = self.estado
+        arquivos = self.registro.executar("list_files", {}).get("saida", "").splitlines()[:40]
+        historico = "\n".join(
+            f"{n}. {p['tool']} {p['path'] or ''} -> {'OK' if p['ok'] else 'ERRO'}".replace("  ", " ")
+            for n, p in enumerate(self._passos[-6:], 1)
+        ) or "(nenhuma)"
+        if not est.testes_executados:
+            testes = "nunca executados"
+        else:
+            testes = "passaram" if est.testes_passaram else "falharam"
+        return (
+            f"TAREFA: {self.tarefa}\n"
+            f"FASE: {est.estado_atual} (reparo {est.tentativas_reparo}/{est.max_reparos})\n"
+            f"TESTES: {testes}\n"
+            f"ERRO_PYTEST: {self._ultimo_erro or '(nenhum)'}\n"
+            f"ARQUIVOS:\n" + "\n".join(arquivos) + "\n"
+            f"ALTERADOS: {', '.join(sorted(est.arquivos_alterados)) or '(nenhum)'}\n"
+            f"HISTORICO:\n{historico}"
+        )
+
+    def _registrar_exemplo(self, nome: str, args: dict):
+        """Grava (estado -> próxima ação do teacher) em actions.jsonl: matéria-prima do dataset."""
+        self.estado.log_acao(
+            "selector_example",
+            features=self._features_seletor(),
+            label={"tool": nome, "path": self._caminho_arg(args)},
+        )
+
+    def _consultar_seletor(self):
+        if self.selector is None:
+            return None
+        try:
+            previsao = self.selector.predict(self._features_seletor())
+        except Exception as e:  # o seletor é um auxiliar: nunca pode derrubar o agente
+            self.estado.log_acao("selector_error", error=f"{type(e).__name__}: {e}"[:300])
+            return None
+        validas = (set(self.registro.nomes()) - self._harness) | {"finish"}
+        if not isinstance(previsao, dict) or previsao.get("tool") not in validas:
+            self.estado.log_acao("selector_invalid", prediction=str(previsao)[:200])
+            return None
+        self.estado.log_acao("selector_prediction", tool=previsao["tool"], path=previsao.get("path"))
+        return previsao
+
+    @staticmethod
+    def _com_dica(messages: list, previsao) -> list:
+        """Anexa a recomendação do seletor à última mensagem SEM alterar o histórico guardado."""
+        if not previsao:
+            return messages
+        alvo = f" (arquivo: {previsao['path']})" if previsao.get("path") else ""
+        dica = (f"\n\nSELETOR: a próxima ferramenta recomendada é '{previsao['tool']}'{alvo}. "
+                "Use-a, a menos que haja um motivo claro para outra.")
+        copia = list(messages)
+        copia[-1] = {**messages[-1], "content": messages[-1]["content"] + dica}
+        return copia
+
+    def _conferir_seletor(self, previsao, primeira_chamada: dict):
+        if not previsao:
+            return
+        seguiu = primeira_chamada.get("tool") == previsao["tool"]
+        self._sel_total += 1
+        self._sel_seguiu += int(seguiu)
+        self.estado.log_acao("selector_agreement", predicted=previsao["tool"],
+                             actual=str(primeira_chamada.get("tool")), followed=seguiu)
+
     def _ciclo_agente(self, messages: list) -> bool:
-        permitidas = [n for n in self.registro.nomes() if n not in FERRAMENTAS_DO_HARNESS]
+        permitidas = [n for n in self.registro.nomes() if n not in self._harness]
         historico = []
 
         for i in range(self.max_iteracoes):
-            resposta = self.llm.chat(messages)
+            previsao = self._consultar_seletor()
+            resposta = self.llm.chat(self._com_dica(messages, previsao))
             messages.append({"role": "assistant", "content": resposta})
 
             try:
@@ -145,6 +244,7 @@ class Orquestrador:
                 })
                 continue
 
+            self._conferir_seletor(previsao, chamadas[0])
             resultados = []
             terminou = False
 
@@ -155,6 +255,8 @@ class Orquestrador:
                     args = {}
 
                 if nome == "finish":
+                    self._registrar_exemplo("finish", {})
+                    self._passos.append({"tool": "finish", "path": None, "ok": True})
                     terminou = True
                     break
 
@@ -163,7 +265,7 @@ class Orquestrador:
                     resultados.append(f"Ferramenta '{nome}' não disponível. Use uma de: {permitidas} ou 'finish'.")
                     continue
 
-                if nome == "run_command" and self._eh_comando_de_teste(args):
+                if self.hard_gates and nome == "run_command" and self._eh_comando_de_teste(args):
                     self.estado.log_acao("blocked_test_command", command=args.get("command"))
                     print("  [run_command] BLOQUEADO: testes são executados pelo sistema")
                     resultados.append(
@@ -172,9 +274,11 @@ class Orquestrador:
                     )
                     continue
 
+                self._registrar_exemplo(nome, args)
                 resultado = self.registro.executar(nome, args)
                 ok = bool(resultado.get("ok"))
                 saida = resultado.get("saida", "")
+                self._passos.append({"tool": nome, "path": self._caminho_arg(args), "ok": ok})
                 self.estado.log_acao(
                     "tool_call", tool=nome, args=self._truncar(json.dumps(args, ensure_ascii=False), 500),
                     ok=ok, result=self._truncar(saida, 500),
@@ -294,8 +398,8 @@ class Orquestrador:
 
             self.estado.mudar_estado("IMPLEMENTING")
             messages = [
-                {"role": "system", "content": PROMPT_SISTEMA.format(
-                    ferramentas=self.registro.descricoes(excluir=FERRAMENTAS_DO_HARNESS))},
+                {"role": "system", "content": (PROMPT_SISTEMA if self.hard_gates else PROMPT_SISTEMA_SO_PROMPT).format(
+                    ferramentas=self.registro.descricoes(excluir=self._harness))},
                 {"role": "user", "content": (
                     f"Tarefa: {self.tarefa}\n\n{spec}\n\nPlano:\n{plano}\n\n"
                     f"Arquivos do projeto:\n{contexto}\n\nComece a implementação."
@@ -306,6 +410,10 @@ class Orquestrador:
             assinatura_anterior, repeticoes_mesmo_erro = None, 0
             while True:
                 self.estado.mudar_estado("VERIFYING")
+                if not self.hard_gates:
+                    # ABLAÇÃO: sem gate, 'finish' vira DONE sem o sistema conferir nada
+                    self.estado.mudar_estado("DONE")
+                    break
                 print("A executar testes...")
                 passou, saida, codigo = self._executar_testes()
 
@@ -319,6 +427,7 @@ class Orquestrador:
                 else:
                     repeticoes_mesmo_erro = 1
                 assinatura_anterior = assinatura
+                self._ultimo_erro = "nenhum teste encontrado" if codigo == 5 else assinatura[:200]
 
                 if repeticoes_mesmo_erro >= LIMITE_MESMO_ERRO_ABORTAR:
                     self.estado.falhar(
@@ -385,8 +494,11 @@ class Orquestrador:
         metricas = {
             "success": sucesso,
             "first_attempt_success": sucesso and self.estado.tentativas_reparo == 0,
+            "hard_gates": self.hard_gates,
         }
         metricas.update(self.llm.metricas())
+        if self.selector is not None:
+            metricas.update({"selector_calls": self._sel_total, "selector_followed": self._sel_seguiu})
         self.estado.salvar_estado(metricas)
 
         if sucesso:

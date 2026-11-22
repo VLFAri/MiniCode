@@ -1,0 +1,1 @@
+Crie datas_br.py com a função eh_data_valida(texto) que devolva True se o texto for uma data real no formato dd/mm/aaaa (com zeros à esquerda, ex.: 05/03/2024), considerando anos bissextos, e False caso contrário.

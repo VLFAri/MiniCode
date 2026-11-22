@@ -1,4 +1,10 @@
-# MiniCode versão 1
+# MiniCode
+
+Agente de programação simplificado (estilo Claude Code) do trabalho prático de Redes Neurais.
+**Parte 1 (v1):** agente + harness. **Parte 2 (v2):** especialização de um modelo pequeno (QLoRA), avaliação e ablação.
+Tudo que está sob "Parte 1" abaixo é a v1; a Parte 2 está no final.
+
+# Parte 1: o agente (v1)
 
 # Estrutura
 
@@ -119,7 +125,7 @@ Defesa em profundidade, em camadas independentes (cada uma vale mesmo se a anter
 
 ## Testes
 
-`tests/` (297 testes, sem rede) cobre:
+`tests/` (sem rede; a v1 tem 297 testes, a v2 acrescenta os de dataset, avaliação, ablação, tarefas e cliente) cobre:
 - **Estado e gates**: transições proibidas, pré-condições de `DONE`/`REPAIRING`, `falhar()`.
 - **Segurança**: caminhos, comandos, scanner de conteúdo (incluindo truques como aliases e remoção de arquivos, e a ausência de falsos positivos em código legítimo), pedido perigoso recusado, reincidência, e a guarda de execução com tentativas reais de fuga (escrita fora do projeto, `os.system`, `subprocess`, rede externa, leitura de `~/.ssh`).
 - **Ferramentas e gerador de spec**.
@@ -142,7 +148,70 @@ em `experiments/resultados/resultados.json` junto do rastro de cada tarefa. Cada
 ```
 <DIR>/<nome_da_tarefa>/
     tarefa.txt     pedido em linguagem natural
-    projeto/       projeto inicial, com os testes que definem o sucesso
+    projeto/       projeto inicial (opcional se a tarefa for "do zero")
+    testes_ocultos/  (v2) testes que rodam DEPOIS do agente e que ele nunca vê
+    referencia/    (v2) solução de referência, usada só para validar a tarefa
 ```
 
 O agente trabalha numa cópia temporária de `projeto/`, então os originais nunca são alterados.
+
+# Parte 2: especialização e experimentos (v2)
+
+Detalhes: [`docs/architecture.md`](docs/architecture.md), [`docs/relatorio_experimental.md`](docs/relatorio_experimental.md), [`docs/roteiro_video.md`](docs/roteiro_video.md) e [`AI_USAGE.md`](AI_USAGE.md).
+
+### Usando um modelo Qwen local (Ollama, LM Studio, llama.cpp)
+
+O padrão é o Qwen-14B da disciplina. Para desenvolver sem o endpoint, escolha o backend local **explicitamente** (nunca
+há fallback automático, para que um resultado nunca venha de um modelo diferente do declarado):
+
+```bash
+ollama list                                   # modelos instalados
+cat > .env <<'EOT'
+MINICODE_BACKEND=local
+# MINICODE_MODEL=qwen2.5-coder:7b             # opcional; sem isso usa o maior Qwen instalado
+# MINICODE_BASE_URL=http://localhost:11434/v1 # padrão (Ollama); LM Studio usa :1234/v1
+EOT
+PYTHONPATH=. python -m src.modelo.cliente_llm   # diagnóstico: servidor, modelos, modelo escolhido, chamada de teste
+```
+
+O `state.json` de cada execução registra `llm_backend` e `llm_model`. Modelos pequenos (≤ 3B) costumam errar o protocolo
+JSON de ferramentas; use 7B ou mais e, no Ollama, aumente o contexto (`OLLAMA_CONTEXT_LENGTH=8192 ollama serve`), pois o
+padrão é curto e corta o prompt em silêncio. Resultados do relatório devem usar o Qwen-14B da disciplina.
+
+Métricas (`resultados.json`) da v2 acrescentam `HiddenSuccessRate` e `FalseSuccessRate` (o agente declarou sucesso, mas os testes
+ocultos reprovaram), `SpecFirstTryValid` e `AverageSpecAttempts`.
+
+## Tarefas de avaliação (`tarefas_teste/`)
+
+[`tarefas_teste/`](tarefas_teste) tem 22 tarefas (função, validação, correção de bug, modificação de API, criação de
+testes, refatoração). Cada uma: `tarefa.txt`, `projeto/` (opcional), `testes_ocultos/` (rodam **depois** do agente) e
+`referencia/` (solução). Os testes de criação de testes usam *mutation testing*: os testes do agente têm de detectar
+defeitos injetados. `python -m src.avaliador.tarefas tarefas_teste` confere que cada tarefa é válida.
+
+## Pipeline da Parte 2
+
+Hipótese, dataset, treino, resultados e discussão: [`docs/relatorio_experimental.md`](docs/relatorio_experimental.md).
+
+```bash
+# 1. dataset (teacher = Qwen-14B da disciplina)
+python gerar_datasets.py --expandir 60          # gera raw_specs.jsonl e dataset_tratado/{train,val,test}.jsonl
+# 2. treino: abra notebooks/train.ipynb no Google Colab (GPU T4) e execute tudo
+# 3. nível 2: o modelo treinado como gerador de spec dentro do agente
+python src/cli/main.py --avaliar tarefas_teste --saida experiments/res_spec_14b
+python src/cli/main.py --avaliar tarefas_teste --spec-model base --spec-4bit --saida experiments/res_spec_base
+python src/cli/main.py --avaliar tarefas_teste --spec-model lora --spec-adapter adapter_spec --spec-4bit --saida experiments/res_spec_lora
+# 4. ablação (completo × sem repair loop × sem hard gate)
+python experiments/ablacao.py --tarefas tarefas_teste --repeticoes 3
+# 5. tabelas do relatório, só com números reais
+python experiments/gerar_relatorio.py
+```
+
+## Ablação
+
+`Orquestrador(hard_gates=False)` / `--sem-hard-gates` desliga só o gate `VERIFYING → DONE` (a regra vira instrução no prompt) para comparar
+"pedir" × "impor". `experiments/ablacao.py` roda `completo`, `sem_repair` (`--max-reparos 0`) e `sem_hard_gate`.
+
+## Reprodutibilidade
+
+`requirements.txt` (agente) e `requirements-train.txt` (modelo local/treino). Os testes **precisam** se chamar `test_*.py`
+(`teste_*.py` não é coletado pelo pytest). O agente é estocástico: a ablação aceita `--repeticoes` e reporta média e desvio.

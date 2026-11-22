@@ -1,0 +1,1 @@
+O módulo estatistica.py tem bugs: media() e mediana() devolvem valores errados. Corrija as duas funções. Lista vazia deve lançar ValueError em ambas, e a lista recebida não pode ser alterada.

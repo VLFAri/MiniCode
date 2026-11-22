@@ -1,0 +1,1 @@
+Adicione validação à função cadastrar(nome, email) de cadastro.py: o nome não pode ser vazio (após remover espaços das pontas) e o e-mail deve ter formato válido (algo@dominio.ext, sem espaços), senão lance ValueError. E-mail repetido (ignorando maiúsculas) também lança ValueError. O e-mail deve ser guardado em minúsculas em USUARIOS e a função devolve o registro criado.
