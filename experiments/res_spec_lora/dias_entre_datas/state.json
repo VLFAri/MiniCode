@@ -1,0 +1,20 @@
+{
+  "state": "FAILED",
+  "task": "Crie datas.py com a função dias_entre(d1, d2) que receba duas datas no formato AAAA-MM-DD e devolva o número inteiro de dias entre elas (sempre não negativo, independentemente da ordem). Datas inválidas lançam ValueError.",
+  "repair_attempts": 3,
+  "files_changed": [
+    "datas.py",
+    "tests/test_datas.py"
+  ],
+  "tests_run": 4,
+  "last_tests_passed": false,
+  "error": "O mesmo erro se repetiu em 4 reparos seguidos sem ser corrigido; abortado para não desperdiçar tentativas.",
+  "success": false,
+  "first_attempt_success": false,
+  "hard_gates": true,
+  "llm_calls": 5,
+  "prompt_tokens": 26005,
+  "completion_tokens": 5689,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}

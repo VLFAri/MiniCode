@@ -11,7 +11,7 @@ import argparse
 import json
 from pathlib import Path
 
-from src.avaliador.avaliador import avaliar_tarefa, resumir
+from src.avaliador.avaliador import avaliar_tarefa, checar_infra, resumir
 from src.avaliador.tabelas import (METRICAS, carregar_ablacao, media_e_desvio,  # noqa: F401  (reexportados)
                                    tabela_markdown)
 
@@ -36,6 +36,7 @@ def rodar(dir_tarefas: str, saida: str, configs: list, repeticoes: int, max_iter
                 print(f"\n##### [{nome} #{rep}] {d.name} #####")
                 resultados.append(avaliar_tarefa(d, destino, cfg["max_reparos"], max_iteracoes,
                                                  hard_gates=cfg["hard_gates"], **extra))
+                checar_infra(resultados)      # levanta InfraestruturaIndisponivel: não faz sentido comparar configurações assim
             resumo = resumir(resultados)
             (destino / "resultados.json").write_text(
                 json.dumps({"config": nome, "summary": resumo, "results": resultados}, indent=2, ensure_ascii=False),

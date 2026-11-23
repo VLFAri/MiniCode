@@ -1,0 +1,17 @@
+{
+  "state": "FAILED",
+  "task": "Crie o arquivo tests/test_calculadora.py com testes pytest para as funções somar, subtrair e dividir de calculadora.py, incluindo o caso de divisão por zero (ZeroDivisionError). Não altere calculadora.py.",
+  "repair_attempts": 0,
+  "files_changed": [],
+  "tests_run": 0,
+  "last_tests_passed": false,
+  "error": "O plano gerado não é uma lista numerada.",
+  "success": false,
+  "first_attempt_success": false,
+  "hard_gates": true,
+  "llm_calls": 1,
+  "prompt_tokens": 1484,
+  "completion_tokens": 1266,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}

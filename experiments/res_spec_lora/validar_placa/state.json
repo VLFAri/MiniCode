@@ -1,0 +1,17 @@
+{
+  "state": "FAILED",
+  "task": "Crie placas.py com a função validar_placa(texto) que devolva True para placas brasileiras válidas: padrão antigo (três letras e quatro dígitos, com hífen opcional: ABC-1234 ou ABC1234) e padrão Mercosul (ABC1D23). Aceite maiúsculas e minúsculas. Qualquer outra coisa, inclusive valores que não sejam texto, devolve False.",
+  "repair_attempts": 0,
+  "files_changed": [],
+  "tests_run": 0,
+  "last_tests_passed": false,
+  "error": "CUDA error: CUBLAS_STATUS_EXECUTION_FAILED when calling `cublasGemmEx( handle, opa, opb, m, n, k, &falpha, a, CUDA_R_16BF, lda, b, CUDA_R_16BF, ldb, &fbeta, c, std::is_same_v<C_Dtype, float> ? CUDA_R_32F : CUDA_R_16BF, ldc, compute_type, CUBLAS_GEMM_DEFAULT_TENSOR_OP)`",
+  "success": false,
+  "first_attempt_success": false,
+  "hard_gates": true,
+  "llm_calls": 0,
+  "prompt_tokens": 0,
+  "completion_tokens": 0,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}

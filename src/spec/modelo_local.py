@@ -5,9 +5,47 @@ Expõe a mesma interface que o `GeradorSpec` espera de um LLM: `complete(prompt,
 from __future__ import annotations
 
 import os
+import re
 import time
+from pathlib import Path
 
 MODELO_SPEC_PADRAO = "Qwen/Qwen2.5-Coder-1.5B-Instruct"
+_ID_HUGGING_FACE = re.compile(r"^[\w][\w.-]*/[\w.-]+$")      # usuario/repositorio
+
+
+def resolver_adapter(adapter: str) -> str:
+    """Devolve o caminho do adapter LoRA ou falha com uma mensagem útil.
+
+    Sem isto, uma pasta inexistente vira um erro 401 do Hugging Face (o PEFT tenta tratar o nome como um repositório
+    online), que esconde a causa real. Também aceita o zip extraído dentro de uma pasta de mesmo nome
+    (adapter_spec/adapter_spec/adapter_config.json).
+    """
+    p = Path(adapter).expanduser()
+    if p.is_dir():
+        if (p / "adapter_config.json").exists():
+            return str(p)
+        filhos = [d for d in p.iterdir() if d.is_dir() and (d / "adapter_config.json").exists()]
+        if len(filhos) == 1:
+            return str(filhos[0])
+        conteudo = sorted(x.name for x in p.iterdir())[:8]
+        raise FileNotFoundError(
+            f"A pasta '{p}' existe, mas não tem adapter_config.json (conteúdo: {conteudo}). "
+            "Use a pasta gerada pelo notebook (model.save_pretrained), que contém adapter_config.json e adapter_model.safetensors.")
+    if not p.exists() and _ID_HUGGING_FACE.match(adapter) and not adapter.startswith((".", "/", "~")):
+        return adapter                      # parece um repositório do Hugging Face (usuario/modelo)
+    raise FileNotFoundError(
+        f"Adapter não encontrado: '{adapter}' (pasta atual: {Path.cwd()}). Descompacte o adapter_spec.zip baixado do Colab "
+        "aqui, ou passe o caminho completo em --spec-adapter.")
+
+
+def _carregar(classe, nome: str, **kw):
+    """from_pretrained com pesos em fp16 EXPLÍCITO: sem isso, versões novas do transformers carregam no tipo do
+    checkpoint (bf16), que falha em GPUs sem suporte nativo (CUBLAS_STATUS_EXECUTION_FAILED). O treino usou fp16."""
+    import torch
+    from importlib.metadata import version
+    partes = version("transformers").split(".")
+    chave = "dtype" if (int(partes[0]), int(partes[1])) >= (4, 56) else "torch_dtype"   # torch_dtype foi renomeado
+    return classe.from_pretrained(nome, **{chave: torch.float16}, **kw)
 
 
 class LocalSpecModel:
@@ -17,6 +55,8 @@ class LocalSpecModel:
 
         self.torch = torch
         self.max_new_tokens = max_new_tokens
+        if adapter and model is None:
+            adapter = resolver_adapter(adapter)     # antes de carregar o modelo base, que é a parte demorada
         if model is None:
             from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -27,9 +67,9 @@ class LocalSpecModel:
                 from transformers import BitsAndBytesConfig
                 bnb = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4",
                                          bnb_4bit_compute_dtype=torch.float16, bnb_4bit_use_double_quant=True)
-                model = AutoModelForCausalLM.from_pretrained(modelo, quantization_config=bnb, device_map={"": 0})
+                model = _carregar(AutoModelForCausalLM, modelo, quantization_config=bnb, device_map={"": 0})
             else:
-                model = AutoModelForCausalLM.from_pretrained(modelo, torch_dtype=torch.float16 if cuda else torch.float32)
+                model = _carregar(AutoModelForCausalLM, modelo) if cuda else AutoModelForCausalLM.from_pretrained(modelo, torch_dtype=torch.float32)
                 model.to("cuda" if cuda else "cpu")
             if adapter:
                 from peft import PeftModel

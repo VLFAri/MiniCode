@@ -1,0 +1,17 @@
+{
+  "state": "FAILED",
+  "task": "Crie o módulo palavras.py com a função frequencia_palavras(texto) que devolva um dicionário com a contagem de cada palavra do texto, em minúsculas e ignorando a pontuação. Texto vazio devolve um dicionário vazio.",
+  "repair_attempts": 0,
+  "files_changed": [],
+  "tests_run": 0,
+  "last_tests_passed": false,
+  "error": "Connection error.",
+  "success": false,
+  "first_attempt_success": false,
+  "hard_gates": true,
+  "llm_calls": 0,
+  "prompt_tokens": 0,
+  "completion_tokens": 0,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}

@@ -1,0 +1,17 @@
+{
+  "state": "FAILED",
+  "task": "No mini roteador app.py, adicione a rota GET /health que devolva o status 200 e o corpo {\"status\": \"ok\"}. As rotas existentes devem continuar funcionando e caminhos desconhecidos continuam devolvendo 404.",
+  "repair_attempts": 0,
+  "files_changed": [],
+  "tests_run": 0,
+  "last_tests_passed": false,
+  "error": "O plano gerado não é uma lista numerada.",
+  "success": false,
+  "first_attempt_success": false,
+  "hard_gates": true,
+  "llm_calls": 1,
+  "prompt_tokens": 1483,
+  "completion_tokens": 895,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}

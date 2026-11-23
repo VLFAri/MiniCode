@@ -11,6 +11,28 @@ from src.modelo.cliente_llm import LLMClient
 from src.selector.seletor import criar_seletor
 from src.spec.modelo_local import criar_llm_spec
 
+# Falhas da INFRAESTRUTURA (GPU, endpoint fora do ar) não dizem nada sobre o agente: não podem entrar nas taxas
+MARCADORES_INFRA = ("CUDA error", "CUBLAS", "CUDA out of memory", "OutOfMemoryError", "Error code: 50",
+                    "Connection error", "APIConnectionError", "APITimeoutError", "Request timed out")
+
+
+class InfraestruturaIndisponivel(RuntimeError):
+    pass
+
+
+def erro_de_infraestrutura(mensagem) -> bool:
+    return bool(mensagem) and any(m in str(mensagem) for m in MARCADORES_INFRA)
+
+
+def checar_infra(resultados: list, limite: int = 2):
+    """Um erro de GPU deixa o contexto CUDA quebrado e TODAS as tarefas seguintes falham igual: para cedo."""
+    ultimos = resultados[-limite:]
+    if len(ultimos) == limite and all(r.get("infra_error") for r in ultimos):
+        raise InfraestruturaIndisponivel(
+            f"{limite} tarefas seguidas falharam por infraestrutura ({ultimos[-1].get('error', '')[:140]}). Avaliação "
+            "interrompida: esses resultados NÃO medem o agente. Corrija o ambiente (GPU/endpoint) e rode de novo.")
+
+
 def rodar_testes_ocultos(dir_tarefa: Path, projeto: Path, agente):
     """Critério de sucesso INDEPENDENTE do agente.
 
@@ -77,6 +99,7 @@ def avaliar_tarefa(dir_tarefa: Path, saida: Path, max_reparos: int, max_iteracoe
         "hidden_pass": hidden_pass,
         "hard_gates": hard_gates,
         "llm_model": estado.get("llm_model"),
+        "infra_error": erro_de_infraestrutura(estado.get("error")),
         "spec_attempts": len(tentativas_spec),
         "spec_first_try_valid": bool(tentativas_spec) and not tentativas_spec[0].get("problems"),
         "selector_calls": estado.get("selector_calls"),
@@ -85,9 +108,11 @@ def avaliar_tarefa(dir_tarefa: Path, saida: Path, max_reparos: int, max_iteracoe
 
 
 def resumir(resultados: list) -> dict:
+    n_infra = sum(bool(r.get("infra_error")) for r in resultados)
+    resultados = [r for r in resultados if not r.get("infra_error")]
     n = len(resultados)
     if n == 0:
-        return {}
+        return {"tasks": 0, "infra_errors": n_infra} if n_infra else {}
     resumo = {
         "tasks": n,
         "TaskSuccessRate": sum(r["success"] for r in resultados) / n,
@@ -101,6 +126,8 @@ def resumir(resultados: list) -> dict:
     if ocultos:  # o agente disse DONE mas os testes ocultos reprovaram: o que um hard gate de verdade deveria evitar
         conhecidos = [r for r in resultados if r.get("hidden_pass") is not None]
         resumo["FalseSuccessRate"] = sum(bool(r["success"]) and not r["hidden_pass"] for r in conhecidos) / len(conhecidos)
+    if n_infra:
+        resumo["infra_errors"] = n_infra          # tarefas excluídas das taxas por falha de infraestrutura
     com_spec = [r for r in resultados if r.get("spec_attempts")]
     if com_spec:  # qualidade da especificação medida DENTRO do agente
         resumo["AverageSpecAttempts"] = sum(r["spec_attempts"] for r in com_spec) / len(com_spec)
@@ -138,12 +165,17 @@ def main(argv=None) -> int:
     saida = Path(args.saida)
     saida.mkdir(parents=True, exist_ok=True)
 
-    resultados = []
+    resultados, parada = [], None
     for d in sorted(Path(args.tarefas).iterdir()):
         if not (d / "tarefa.txt").exists():
             continue
         print(f"\n##### {d.name} #####")
         resultados.append(avaliar_tarefa(d, saida, args.max_reparos, args.max_iteracoes, **extra))
+        try:
+            checar_infra(resultados)
+        except InfraestruturaIndisponivel as e:
+            parada = str(e)
+            break
 
     resumo = resumir(resultados)
     (saida / "resultados.json").write_text(
@@ -157,6 +189,9 @@ def main(argv=None) -> int:
         print(f"{marca} {r['task']:<28} iter={r['iterations']} llm_calls={r['llm_calls']} {r['seconds']}s")
     for k, v in resumo.items():
         print(f"{k}: {v:.2f}" if isinstance(v, float) else f"{k}: {v}")
+    if parada:
+        print(f"\n❌ {parada}")
+        return 1
     return 0
 
 if __name__ == "__main__":

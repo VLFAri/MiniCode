@@ -3,8 +3,12 @@ import json
 import sys
 from pathlib import Path
 
+# permite `python src/cli/main.py` sem PYTHONPATH (o README da v1 promete isso): a raiz do projeto entra no caminho de imports
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
 from src.agente.orquestrador import Orquestrador
-from src.avaliador.avaliador import avaliar_tarefa, resumir  # noqa: F401  (reexportados: usados pelo CLI e pelos testes)
+from src.avaliador.avaliador import (InfraestruturaIndisponivel, avaliar_tarefa, checar_infra,  # noqa: F401
+                                     resumir)  # reexportados: usados pelo CLI e pelos testes
 from src.selector.seletor import criar_seletor
 from src.spec.modelo_local import criar_llm_spec
 
@@ -17,12 +21,17 @@ def avaliar_lote(dir_tarefas: str, dir_saida: str, max_reparos: int, max_iteraco
     extra = {k: v for k, v in (("selector", selector), ("llm_spec", llm_spec)) if v}
     if not hard_gates:
         extra["hard_gates"] = False
-    resultados = []
+    resultados, parada = [], None
     for d in sorted(Path(dir_tarefas).iterdir()):
         if not (d / "tarefa.txt").exists():
             continue
         print(f"\n##### {d.name} #####")
         resultados.append(avaliar_tarefa(d, saida, max_reparos, max_iteracoes, **extra))
+        try:
+            checar_infra(resultados)
+        except InfraestruturaIndisponivel as e:
+            parada = str(e)
+            break
 
     resumo = resumir(resultados)
     (saida / "resultados.json").write_text(
@@ -36,6 +45,9 @@ def avaliar_lote(dir_tarefas: str, dir_saida: str, max_reparos: int, max_iteraco
         print(f"{marca} {r['task']:<28} iter={r['iterations']} llm_calls={r['llm_calls']} {r['seconds']}s")
     for k, v in resumo.items():
         print(f"{k}: {v:.2f}" if isinstance(v, float) else f"{k}: {v}")
+    if parada:
+        print(f"\n❌ {parada}")
+        return 1
     return 0
 
 

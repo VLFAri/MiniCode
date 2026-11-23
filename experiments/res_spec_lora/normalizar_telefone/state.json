@@ -1,0 +1,17 @@
+{
+  "state": "FAILED",
+  "task": "Crie telefone.py com a função normalizar_telefone(texto) que receba um telefone brasileiro e devolva no formato internacional +55DDDNUMERO. Remova espaços, parênteses e hífens; se começar com +55, remova esse prefixo antes de validar. O restante deve ter 10 dígitos (DDD + número fixo de 8 dígitos) ou 11 dígitos (DDD + celular de 9 dígitos começando com 9); caso contrário lance ValueError. Exemplo: '(67) 99999-1234' vira '+5567999991234'.",
+  "repair_attempts": 0,
+  "files_changed": [],
+  "tests_run": 0,
+  "last_tests_passed": false,
+  "error": "CUDA error: unknown error\nSearch for `cudaErrorUnknown' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.\n",
+  "success": false,
+  "first_attempt_success": false,
+  "hard_gates": true,
+  "llm_calls": 0,
+  "prompt_tokens": 0,
+  "completion_tokens": 0,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}

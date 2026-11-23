@@ -1,0 +1,19 @@
+{
+  "state": "DONE",
+  "task": "O módulo estatistica.py tem bugs: media() e mediana() devolvem valores errados. Corrija as duas funções. Lista vazia deve lançar ValueError em ambas, e a lista recebida não pode ser alterada.",
+  "repair_attempts": 0,
+  "files_changed": [
+    "estatistica.py",
+    "tests/test_estatistica.py"
+  ],
+  "tests_run": 1,
+  "last_tests_passed": true,
+  "success": true,
+  "first_attempt_success": true,
+  "hard_gates": true,
+  "llm_calls": 4,
+  "prompt_tokens": 6415,
+  "completion_tokens": 2523,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}

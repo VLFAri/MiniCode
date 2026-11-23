@@ -1,0 +1,82 @@
+# Specification
+
+## Objective
+Corrigir o problema de compartilhamento de objetos no método `adicionar` da classe `Carrinho`, mantendo a assinatura original.
+
+## Parameters / Requirements
+- **Classe:** `Carrinho`
+- **Método:** `adicionar(self, item=None)`
+- **Entrada:** O método aceita um parâmetro opcional `item`.
+- **Restrição:** Quando `item` não for fornecido, deve-se retornar o próprio objeto `Carrinho`. Se `item` for fornecido, deve-se adicionar esse item ao carrinho atual e retornar o mesmo objeto `Carrinho`.
+
+## Acceptance Criteria
+- `carrinho = Carrinho()` retorna `carrinho`
+- `carrinho.adicionar('banana')` retorna `carrinho`
+- `carrinho.adicionar('maçã')` retorna `carrinho`
+- `carrinho.adicionar(None)` retorna `carrinho`
+- `carrinho.adicionar('laranja')` retorna `carrinho`
+- `carrinho.adicionar('uva')` retorna `carrinho`
+- `carrinho.adicionar('morango')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('abacaxi')` retorna `carrinho`
+- `carrinho.adicionar('limão')` retorna `carrinho`
+- `carrinho.adicionar('mamão')` retorna `carrinho`
+- `carrinho.adicionar('goiaba')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('kiwi')` retorna `carrinho`
+- `carrinho.adicionar('melancia')` retorna `carrinho`
+- `carrinho.adicionar('caqui')` retorna `carrinho`
+- `carrinho.adicionar('pêssego')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('jabuticaba')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('maracujá')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('tangerina')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carrinho.adicionar('manga')` retorna `carrinho`
+- `carr

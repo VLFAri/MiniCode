@@ -1,0 +1,19 @@
+{
+  "state": "DONE",
+  "task": "Refatore preco.py eliminando a duplicação: crie a função aplicar_desconto(valor, percentual) (valor negativo ou percentual fora de 0 a 100 lança ValueError; resultado arredondado a 2 casas) e faça preco_vip (20%), preco_normal (5%) e preco_promocao (30%) usarem essa função, sem mudar o comportamento atual delas.",
+  "repair_attempts": 1,
+  "files_changed": [
+    "preco.py",
+    "tests/test_preco.py"
+  ],
+  "tests_run": 2,
+  "last_tests_passed": true,
+  "success": true,
+  "first_attempt_success": false,
+  "hard_gates": true,
+  "llm_calls": 4,
+  "prompt_tokens": 6209,
+  "completion_tokens": 2223,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}

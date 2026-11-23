@@ -1,0 +1,17 @@
+{
+  "state": "FAILED",
+  "task": "Crie o arquivo tests/test_inventario.py com testes pytest para a classe Inventario de inventario.py: adicionar, remover, quantidade, quantidade de item inexistente, adição com quantidade não positiva e remoção maior que o estoque. Não altere inventario.py.",
+  "repair_attempts": 0,
+  "files_changed": [],
+  "tests_run": 0,
+  "last_tests_passed": false,
+  "error": "O plano gerado não é uma lista numerada.",
+  "success": false,
+  "first_attempt_success": false,
+  "hard_gates": true,
+  "llm_calls": 1,
+  "prompt_tokens": 642,
+  "completion_tokens": 1037,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}
