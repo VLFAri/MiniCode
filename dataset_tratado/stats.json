@@ -1,0 +1,41 @@
+{
+  "itens": 133,
+  "sem_geracao": 0,
+  "itens_validos": 133,
+  "descartados_por_motivo": {},
+  "teacher_primeira_tentativa_valida": 0.9924812030075187,
+  "splits": {
+    "test": {
+      "tarefas": 20,
+      "exemplos": 20,
+      "tokens_resposta_medio": 537
+    },
+    "val": {
+      "tarefas": 13,
+      "exemplos": 13,
+      "tokens_resposta_medio": 418
+    },
+    "train": {
+      "tarefas": 100,
+      "exemplos": 100,
+      "tokens_resposta_medio": 508
+    }
+  },
+  "sementes_excluidas": {
+    "reservada_do_enunciado": [
+      "Crie uma função que calcule o fatorial de um número inteiro.",
+      "Adicione paginação ao endpoint GET /users aceitando page e page_size.",
+      "Adicione uma rota /health que retorne o JSON status ok."
+    ],
+    "fora_do_escopo_stdlib": [
+      "Corrija o erro de NullPointerException no serviço de usuários.",
+      "Adicione autenticação JWT em um endpoint protegido FastAPI.",
+      "Implemente um rate limiter baseado em token bucket usando Redis simulado.",
+      "Crie um middleware de logging de requisições HTTP para Flask ou FastAPI.",
+      "Adicione versionamento de API via header HTTP em rotas Flask.",
+      "Crie um gerador de relatórios em PDF estruturado a partir de dados de dicionário.",
+      "Crie um gerenciador de configurações baseado em variáveis de ambiente com validação Pydantic.",
+      "Adicione suporte a múltiplos storages (Local e S3 simulado) em um gerenciador de arquivos."
+    ]
+  }
+}
