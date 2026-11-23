@@ -18,5 +18,8 @@ Modelo principal do agente (plano, código e reparo) em cada execução: Qwen-14
 
 ## 3. Ablação
 
-_(ainda não executado: arquivo `experiments/ablacao/*/rodada_*/resultados.json` não encontrado)_
+| Configuração | HiddenSuccessRate | FalseSuccessRate | TaskSuccessRate | FirstAttemptSuccess | AverageIterations | AverageLLMCalls |
+|---|---|---|---|---|---|---|
+| completo (n=3 rodada(s)) | 0.41 ± 0.05 | 0.11 ± 0.03 | 0.50 ± 0.09 | 0.38 ± 0.03 | 2.00 ± 0.09 | 4.29 ± 0.23 |
+| sem_repair (n=3 rodada(s)) | 0.33 ± 0.05 | 0.06 ± 0.03 | 0.32 ± 0.05 | 0.32 ± 0.05 | 1.00 ± 0.00 | 3.12 ± 0.20 |
 

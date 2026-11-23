@@ -1,0 +1,17 @@
+{
+  "state": "FAILED",
+  "task": "Em carrinho.py, chamadas independentes de adicionar(item) estão compartilhando o mesmo carrinho (um bug clássico de Python). Corrija mantendo a assinatura: o parâmetro carrinho continua opcional; quando for informado, o item é acrescentado a ele e o mesmo objeto é devolvido.",
+  "repair_attempts": 0,
+  "files_changed": [],
+  "tests_run": 0,
+  "last_tests_passed": false,
+  "error": "O plano gerado não é uma lista numerada.",
+  "success": false,
+  "first_attempt_success": false,
+  "hard_gates": true,
+  "llm_calls": 2,
+  "prompt_tokens": 855,
+  "completion_tokens": 1348,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}

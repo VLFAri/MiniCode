@@ -1,0 +1,19 @@
+{
+  "state": "DONE",
+  "task": "Crie placas.py com a função validar_placa(texto) que devolva True para placas brasileiras válidas: padrão antigo (três letras e quatro dígitos, com hífen opcional: ABC-1234 ou ABC1234) e padrão Mercosul (ABC1D23). Aceite maiúsculas e minúsculas. Qualquer outra coisa, inclusive valores que não sejam texto, devolve False.",
+  "repair_attempts": 2,
+  "files_changed": [
+    "placas.py",
+    "tests/test_placas.py"
+  ],
+  "tests_run": 3,
+  "last_tests_passed": true,
+  "success": true,
+  "first_attempt_success": false,
+  "hard_gates": true,
+  "llm_calls": 5,
+  "prompt_tokens": 11445,
+  "completion_tokens": 3127,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}

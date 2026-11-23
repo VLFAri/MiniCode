@@ -1,0 +1,19 @@
+{
+  "state": "DONE",
+  "task": "Adicione validação à função cadastrar(nome, email) de cadastro.py: o nome não pode ser vazio (após remover espaços das pontas) e o e-mail deve ter formato válido (algo@dominio.ext, sem espaços), senão lance ValueError. E-mail repetido (ignorando maiúsculas) também lança ValueError. O e-mail deve ser guardado em minúsculas em USUARIOS e a função devolve o registro criado.",
+  "repair_attempts": 0,
+  "files_changed": [
+    "cadastro.py",
+    "tests/test_cadastro.py"
+  ],
+  "tests_run": 0,
+  "last_tests_passed": false,
+  "success": true,
+  "first_attempt_success": true,
+  "hard_gates": false,
+  "llm_calls": 4,
+  "prompt_tokens": 6189,
+  "completion_tokens": 1821,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}

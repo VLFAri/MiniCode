@@ -1,0 +1,19 @@
+{
+  "state": "FAILED",
+  "task": "Crie o arquivo tests/test_inventario.py com testes pytest para a classe Inventario de inventario.py: adicionar, remover, quantidade, quantidade de item inexistente, adição com quantidade não positiva e remoção maior que o estoque. Não altere inventario.py.",
+  "repair_attempts": 0,
+  "files_changed": [
+    "tests/test_inventario.py"
+  ],
+  "tests_run": 1,
+  "last_tests_passed": false,
+  "error": "Testes continuam falhando após 0 reparo(s).",
+  "success": false,
+  "first_attempt_success": false,
+  "hard_gates": true,
+  "llm_calls": 4,
+  "prompt_tokens": 5666,
+  "completion_tokens": 1611,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}

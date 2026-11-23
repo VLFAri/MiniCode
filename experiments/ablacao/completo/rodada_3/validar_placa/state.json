@@ -1,0 +1,17 @@
+{
+  "state": "FAILED",
+  "task": "Crie placas.py com a função validar_placa(texto) que devolva True para placas brasileiras válidas: padrão antigo (três letras e quatro dígitos, com hífen opcional: ABC-1234 ou ABC1234) e padrão Mercosul (ABC1D23). Aceite maiúsculas e minúsculas. Qualquer outra coisa, inclusive valores que não sejam texto, devolve False.",
+  "repair_attempts": 0,
+  "files_changed": [],
+  "tests_run": 0,
+  "last_tests_passed": false,
+  "error": "O plano gerado não é uma lista numerada.",
+  "success": false,
+  "first_attempt_success": false,
+  "hard_gates": true,
+  "llm_calls": 2,
+  "prompt_tokens": 669,
+  "completion_tokens": 1169,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}

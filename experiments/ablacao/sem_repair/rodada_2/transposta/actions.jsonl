@@ -1,0 +1,3 @@
+{"ts": 1795420356.745467, "state": "RECEIVED", "type": "spec_attempt", "attempt": 1, "problems": []}
+{"ts": 1795420356.7460358, "state": "SPECIFIED", "type": "transition", "from": "RECEIVED", "to": "SPECIFIED"}
+{"ts": 1795420387.4502034, "state": "FAILED", "type": "transition", "from": "SPECIFIED", "to": "FAILED", "error": "O plano gerado não é uma lista numerada."}

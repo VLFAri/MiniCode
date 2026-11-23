@@ -1,0 +1,17 @@
+{
+  "state": "FAILED",
+  "task": "A função paginar(itens, pagina, tamanho) em paginacao.py deveria ser 1-indexada (a página 1 devolve os primeiros itens), mas devolve a página errada. Corrija. Se pagina ou tamanho forem menores que 1, lance ValueError. Páginas além do fim devolvem lista vazia.",
+  "repair_attempts": 0,
+  "files_changed": [],
+  "tests_run": 0,
+  "last_tests_passed": false,
+  "error": "O plano gerado não é uma lista numerada.",
+  "success": false,
+  "first_attempt_success": false,
+  "hard_gates": true,
+  "llm_calls": 2,
+  "prompt_tokens": 591,
+  "completion_tokens": 1246,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}

@@ -1,0 +1,20 @@
+{
+  "state": "FAILED",
+  "task": "Crie blocos.py com a função dividir(lista, n) que divida a lista em blocos de tamanho n (o último pode ser menor) e devolva a lista de blocos, sem alterar a lista original. Se n for menor ou igual a zero, lance ValueError.",
+  "repair_attempts": 3,
+  "files_changed": [
+    "project/tests/__init__.py",
+    "project/tests/test_divide.py"
+  ],
+  "tests_run": 4,
+  "last_tests_passed": false,
+  "error": "O mesmo erro se repetiu em 4 reparos seguidos sem ser corrigido; abortado para não desperdiçar tentativas.",
+  "success": false,
+  "first_attempt_success": false,
+  "hard_gates": true,
+  "llm_calls": 7,
+  "prompt_tokens": 15652,
+  "completion_tokens": 2906,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}

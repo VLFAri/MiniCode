@@ -1,0 +1,19 @@
+{
+  "state": "DONE",
+  "task": "Em carrinho.py, chamadas independentes de adicionar(item) estão compartilhando o mesmo carrinho (um bug clássico de Python). Corrija mantendo a assinatura: o parâmetro carrinho continua opcional; quando for informado, o item é acrescentado a ele e o mesmo objeto é devolvido.",
+  "repair_attempts": 1,
+  "files_changed": [
+    "carrinho.py",
+    "tests/test_carrinho.py"
+  ],
+  "tests_run": 2,
+  "last_tests_passed": true,
+  "success": true,
+  "first_attempt_success": false,
+  "hard_gates": true,
+  "llm_calls": 5,
+  "prompt_tokens": 8890,
+  "completion_tokens": 1773,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}

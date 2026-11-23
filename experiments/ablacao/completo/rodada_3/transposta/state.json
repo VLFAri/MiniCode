@@ -1,0 +1,19 @@
+{
+  "state": "DONE",
+  "task": "Crie matriz.py com a função transposta(m) que receba uma matriz como lista de listas e devolva a transposta (nova matriz). Lista vazia devolve []. Se as linhas tiverem tamanhos diferentes, lance ValueError.",
+  "repair_attempts": 0,
+  "files_changed": [
+    "matriz.py",
+    "tests/test_matriz.py"
+  ],
+  "tests_run": 1,
+  "last_tests_passed": true,
+  "success": true,
+  "first_attempt_success": true,
+  "hard_gates": true,
+  "llm_calls": 3,
+  "prompt_tokens": 2585,
+  "completion_tokens": 1300,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}

@@ -1,0 +1,18 @@
+{
+  "state": "DONE",
+  "task": "Crie achatar.py com a função achatar(itens) que receba listas e tuplas aninhadas em qualquer profundidade e devolva uma lista simples com todos os elementos, na ordem. Strings não devem ser achatadas (continuam sendo um único elemento).",
+  "repair_attempts": 0,
+  "files_changed": [
+    "achatar.py"
+  ],
+  "tests_run": 0,
+  "last_tests_passed": false,
+  "success": true,
+  "first_attempt_success": true,
+  "hard_gates": false,
+  "llm_calls": 3,
+  "prompt_tokens": 2858,
+  "completion_tokens": 1384,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}

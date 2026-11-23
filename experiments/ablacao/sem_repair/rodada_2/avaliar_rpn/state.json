@@ -1,0 +1,19 @@
+{
+  "state": "DONE",
+  "task": "Crie rpn.py com a função avaliar_rpn(expressao) que avalie uma expressão em notação polonesa reversa, com tokens separados por espaço, números e os operadores + - * /. Expressão inválida (vazia, token desconhecido, operandos faltando ou sobrando) lança ValueError; divisão por zero lança ZeroDivisionError.",
+  "repair_attempts": 0,
+  "files_changed": [
+    "rpn.py",
+    "tests/test_rpn.py"
+  ],
+  "tests_run": 1,
+  "last_tests_passed": true,
+  "success": true,
+  "first_attempt_success": true,
+  "hard_gates": true,
+  "llm_calls": 3,
+  "prompt_tokens": 2950,
+  "completion_tokens": 1831,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}

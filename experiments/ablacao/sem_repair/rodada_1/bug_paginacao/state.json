@@ -1,0 +1,20 @@
+{
+  "state": "FAILED",
+  "task": "A função paginar(itens, pagina, tamanho) em paginacao.py deveria ser 1-indexada (a página 1 devolve os primeiros itens), mas devolve a página errada. Corrija. Se pagina ou tamanho forem menores que 1, lance ValueError. Páginas além do fim devolvem lista vazia.",
+  "repair_attempts": 0,
+  "files_changed": [
+    "paginacao.py",
+    "tests/test_paginacao.py"
+  ],
+  "tests_run": 1,
+  "last_tests_passed": false,
+  "error": "Testes continuam falhando após 0 reparo(s).",
+  "success": false,
+  "first_attempt_success": false,
+  "hard_gates": true,
+  "llm_calls": 4,
+  "prompt_tokens": 5977,
+  "completion_tokens": 1948,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}

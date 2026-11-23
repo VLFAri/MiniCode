@@ -1,0 +1,18 @@
+{
+  "state": "DONE",
+  "task": "Crie o arquivo tests/test_calculadora.py com testes pytest para as funções somar, subtrair e dividir de calculadora.py, incluindo o caso de divisão por zero (ZeroDivisionError). Não altere calculadora.py.",
+  "repair_attempts": 0,
+  "files_changed": [
+    "tests/test_calculadora.py"
+  ],
+  "tests_run": 1,
+  "last_tests_passed": true,
+  "success": true,
+  "first_attempt_success": true,
+  "hard_gates": true,
+  "llm_calls": 4,
+  "prompt_tokens": 5908,
+  "completion_tokens": 1792,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}

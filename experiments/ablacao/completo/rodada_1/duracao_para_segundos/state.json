@@ -1,0 +1,19 @@
+{
+  "state": "DONE",
+  "task": "Crie duracao.py com a função para_segundos(texto) que converta uma duração como '1h30m15s' em segundos. Aceite qualquer combinação de horas (h), minutos (m) e segundos (s), nessa ordem e sem espaços (ex.: '2h', '90m', '45s'). Texto vazio ou em formato inválido lança ValueError.",
+  "repair_attempts": 0,
+  "files_changed": [
+    "converter.py",
+    "tests/test_converter.py"
+  ],
+  "tests_run": 1,
+  "last_tests_passed": true,
+  "success": true,
+  "first_attempt_success": true,
+  "hard_gates": true,
+  "llm_calls": 3,
+  "prompt_tokens": 2718,
+  "completion_tokens": 1614,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}

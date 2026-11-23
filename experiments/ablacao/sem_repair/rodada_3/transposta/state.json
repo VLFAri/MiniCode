@@ -1,0 +1,17 @@
+{
+  "state": "FAILED",
+  "task": "Crie matriz.py com a função transposta(m) que receba uma matriz como lista de listas e devolva a transposta (nova matriz). Lista vazia devolve []. Se as linhas tiverem tamanhos diferentes, lance ValueError.",
+  "repair_attempts": 0,
+  "files_changed": [],
+  "tests_run": 0,
+  "last_tests_passed": false,
+  "error": "O plano gerado não é uma lista numerada.",
+  "success": false,
+  "first_attempt_success": false,
+  "hard_gates": true,
+  "llm_calls": 2,
+  "prompt_tokens": 517,
+  "completion_tokens": 1002,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}

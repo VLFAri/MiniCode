@@ -1,0 +1,17 @@
+{
+  "state": "FAILED",
+  "task": "Crie achatar.py com a função achatar(itens) que receba listas e tuplas aninhadas em qualquer profundidade e devolva uma lista simples com todos os elementos, na ordem. Strings não devem ser achatadas (continuam sendo um único elemento).",
+  "repair_attempts": 0,
+  "files_changed": [],
+  "tests_run": 0,
+  "last_tests_passed": false,
+  "error": "O plano gerado não é uma lista numerada.",
+  "success": false,
+  "first_attempt_success": false,
+  "hard_gates": true,
+  "llm_calls": 2,
+  "prompt_tokens": 720,
+  "completion_tokens": 1187,
+  "llm_backend": "remoto",
+  "llm_model": "Qwen/Qwen2.5-14B-Instruct-AWQ"
+}
